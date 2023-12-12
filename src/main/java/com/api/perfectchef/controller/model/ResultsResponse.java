@@ -1,6 +1,6 @@
 package com.api.perfectchef.controller.model;
 
-import com.api.perfectchef.service.models.model.Recipe;
+import com.api.perfectchef.service.models.apimodel.Recipe;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 

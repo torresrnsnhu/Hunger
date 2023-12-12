@@ -1,4 +1,4 @@
-package com.api.perfectchef.service.models;
+package com.api.perfectchef.service.models.apimodel;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,7 +8,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection = "favoriteRecipes")
-public class FavoriteRecipes {
-    private String recipe;
+@Document(collection = "length")
+public class Length {
+    private int number;
+    private String unit;
 }

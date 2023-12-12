@@ -1,4 +1,4 @@
-package com.api.perfectchef.service.models.model;
+package com.api.perfectchef.service.models.apimodel;
 
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;

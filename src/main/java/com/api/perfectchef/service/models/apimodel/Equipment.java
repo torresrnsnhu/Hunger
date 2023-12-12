@@ -1,4 +1,4 @@
-package com.api.perfectchef.service.models.model;
+package com.api.perfectchef.service.models.apimodel;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,10 +8,13 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection = "ingredient")
-public class Ingredient {
+@Document(collection = "equipment")
+public class Equipment {
     private int id;
     private String name;
     private String localizedName;
     private String image;
+    private double temperature;
+
+    // Getters and setters
 }

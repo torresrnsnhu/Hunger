@@ -1,4 +1,4 @@
-package com.api.perfectchef.service.models.model;
+package com.api.perfectchef.service.models.apimodel;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
