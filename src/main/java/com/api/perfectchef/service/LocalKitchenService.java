@@ -14,9 +14,6 @@ import java.util.UUID;
 public class LocalKitchenService {
     private final LocalKitchenRepository usersRepository;
 
-    public Iterable<RecipeEntity> findAllUsers() {
-        return usersRepository.findAll();
-    }
     public RecipeEntity findRecipeByTitle(String title) {
         return  usersRepository.findRecipeBy(title);
     }

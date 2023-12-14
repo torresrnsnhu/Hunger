@@ -75,8 +75,4 @@ public class KitchenService {
             return ResponseEntity.notFound().build();
         }
     }
-    public List<Results> getAvailableRecipes() {
-        System.out.println(kitchenRepository.findAll() );
-        return kitchenRepository.findAll();
-    }
 }
