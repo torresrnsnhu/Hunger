@@ -8,5 +8,4 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.List;
 
 public interface KitchenRepository extends MongoRepository<Results, ObjectId> {
-    Results findByRecipes(List<Recipe> recipes);
 }

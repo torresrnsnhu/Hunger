@@ -2,6 +2,7 @@ package com.api.perfectchef.controller;
 
 import com.api.perfectchef.service.KitchenService;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,13 +16,11 @@ import java.util.List;
 @RequestMapping("/api/recipes")
 public class KitchenApiController {
     private final KitchenService kitchenService;
+    private final ModelMapper mapper;
 
-    /**
-     * @param tags -
-     * @return - JSON response of recipes
-     */
+
     @GetMapping
-    public ResponseEntity<String> getAllAvailableRecipes(
+    public ResponseEntity<String> getRandomRecipeFromApi(
             @RequestParam(value = "tags") String tags,
             @RequestParam(value = "cuisine", required = false) String cuisine,
             @RequestParam(value = "diet", required = false) List<String> diet,
@@ -30,17 +29,14 @@ public class KitchenApiController {
             @RequestParam(value = "excludeIngredients", required = false) List<String> excludeIngredients) {
 
         try {
-            // Construct URL using UriComponentsBuilder
             String url = kitchenService.buildApiUrl(tags, cuisine, diet, intolerance, includeIngredients, excludeIngredients);
 
-            // Make HTTP GET request using RestTemplate or WebClient
             String jsonResponse = kitchenService.makeHttpGetRequest(url);
-
+            
             // Handle JSON response
             System.out.println(jsonResponse);
             return kitchenService.handleJsonResponse(jsonResponse);
         } catch (IOException e) {
-            // Handle IOException
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error making API request: " + e.getMessage());
         }

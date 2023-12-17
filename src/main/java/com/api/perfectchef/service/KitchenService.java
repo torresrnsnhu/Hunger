@@ -2,11 +2,12 @@ package com.api.perfectchef.service;
 
 import com.api.perfectchef.configuration.ApiConfig;
 import com.api.perfectchef.controller.model.ResultsResponse;
-import com.api.perfectchef.repositories.KitchenRepository;
 import com.api.perfectchef.service.models.apimodel.Recipe;
-import com.api.perfectchef.service.models.apimodel.Results;
+import com.api.perfectchef.service.models.dto.LocalRecipeDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -15,17 +16,14 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.util.List;
-@Service
-public class KitchenService {
-    private final KitchenRepository kitchenRepository;
-    private final RestTemplate restTemplate;
-    private final ApiConfig apiConfig;
+import java.util.stream.Collectors;
 
-    public KitchenService(RestTemplateBuilder restTemplateBuilder, KitchenRepository kitchenRepository, ApiConfig apiConfig) {
-        this.restTemplate = restTemplateBuilder.build();
-        this.kitchenRepository = kitchenRepository;
-        this.apiConfig = apiConfig;
-    }
+@Service
+@AllArgsConstructor
+public class KitchenService {
+    private final RestTemplate restTemplate = new RestTemplateBuilder().build();
+    private final ApiConfig apiConfig;
+    private final ModelMapper mapper;
 
     public String makeHttpGetRequest(String url) throws IOException {
         try {
@@ -68,11 +66,26 @@ public class KitchenService {
             return ResponseEntity.notFound().build();
         }
         List<Recipe> recipeArray = response.getRecipes();
+
         if (recipeArray != null && !recipeArray.isEmpty()) {
-            String json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(recipeArray);
-            return ResponseEntity.ok(json);
+            // Convert ResultsResponse to DTO
+            ResponseEntity<List<LocalRecipeDto>> dtoResponseEntity = convertToDto(recipeArray);
+
+            if (dtoResponseEntity.getStatusCode().is2xxSuccessful()) {
+                // Convert DTO to JSON string
+                String json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(dtoResponseEntity.getBody());
+                return ResponseEntity.ok(json);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+    private ResponseEntity<List<LocalRecipeDto>> convertToDto(List<Recipe> recipes) {
+        List<LocalRecipeDto> dtoList = recipes.stream()
+                .map(recipe -> mapper.map(recipe, LocalRecipeDto.class))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(dtoList);
     }
 }

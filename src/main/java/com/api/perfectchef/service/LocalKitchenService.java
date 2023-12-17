@@ -12,28 +12,32 @@ import java.util.UUID;
 @Service
 @AllArgsConstructor
 public class LocalKitchenService {
-    private final LocalKitchenRepository usersRepository;
+    private final LocalKitchenRepository localKitchenRepository;
 
     public RecipeEntity findRecipeByTitle(String title) {
-        return  usersRepository.findRecipeBy(title);
+        return  findTitleOrThrow(title);
     }
     public RecipeEntity findRecipeById(ObjectId id) {
-        return findOrThrow(id);
+        return findIdOrThrow(id);
     }
-    public void removeRecipeById(ObjectId id) {
-        usersRepository.deleteById(id);
+    public void removeRecipeByTitle(String title) {
+     localKitchenRepository.delete(findTitleOrThrow(title));
     }
     public RecipeEntity addRecipe(RecipeEntity recipe) {
-        return usersRepository.save(recipe);
+        return localKitchenRepository.save(recipe);
     }
     public void updateRecipe(ObjectId id, RecipeEntity recipe) {
-        this.findOrThrow(id);
-        usersRepository.save(recipe);
+        this.findIdOrThrow(id);
+        localKitchenRepository.save(recipe);
     }
 
-    private RecipeEntity findOrThrow(final ObjectId id) {
-        return usersRepository.findById(id).orElseThrow(
+    private RecipeEntity findIdOrThrow(final ObjectId id) {
+        return localKitchenRepository.findById(id).orElseThrow(
                 () -> new NotFoundException("Recipe by id " + id + " was not found")
         );
+    }
+    private RecipeEntity findTitleOrThrow(final String title) {
+        return localKitchenRepository.findRecipeByTitle(title)
+                .orElseThrow(() -> new NotFoundException("Recipe by title " + title + " was not found"));
     }
 }
