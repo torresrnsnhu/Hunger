@@ -9,7 +9,9 @@ import java.util.Collection;
 
 @AllArgsConstructor
 public class UserPrincipal implements UserDetails {
-    private final UserEntity entity;
+
+    private final UserEntity userEntity;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
@@ -18,9 +20,10 @@ public class UserPrincipal implements UserDetails {
     public String getPassword() {
         return null;
     }
+
     @Override
     public String getUsername() {
-        return this.entity.getUsername();
+        return this.userEntity.getEmail();
     }
 
     @Override

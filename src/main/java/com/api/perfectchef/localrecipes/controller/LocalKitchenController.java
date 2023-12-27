@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import org.bson.types.ObjectId;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -16,6 +17,7 @@ import javax.validation.Valid;
 @RestController
 @AllArgsConstructor
 @RequestMapping("api/v1/recipes")
+@PreAuthorize("isAuthenticated()")
 public class LocalKitchenController {
 
     private final LocalKitchenService local;

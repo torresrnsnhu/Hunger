@@ -15,5 +15,5 @@ public interface UserRepository  extends MongoRepository<UserEntity, ObjectId> {
     Boolean selectExistsEmail(String email);
     UserEntity findByEmail(String email);
     Optional<UserEntity> findByUsername(String username);
-    UserEntity deleteByUsername(String username);
+    void deleteByUsername(String username);
 }

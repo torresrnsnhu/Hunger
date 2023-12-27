@@ -1,5 +1,6 @@
 package com.api.perfectchef.configuration;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
@@ -10,22 +11,35 @@ import java.util.Arrays;
 
 @Configuration
 public class CorsConfig {
+
+    final AppProperties appProperties;
+
+    public CorsConfig(AppProperties appProperties) {
+        this.appProperties = appProperties;
+    }
+
+    @Value("${client.url}")
+    private String CLIENT_URL;
+
     @Bean
     CorsFilter corsFilter() {
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true);
-        config.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
-        config.setAllowedHeaders(
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.setAllowCredentials(true);
+        corsConfiguration.setAllowedOrigins(Arrays.asList(CLIENT_URL));
+        corsConfiguration.setAllowedHeaders(
                 Arrays.asList(
                         "Origin",
                         "Access-Control-Allow-Origin",
                         "Content-Type",
                         "Accept",
                         "Authorization",
-                        "Origin, Accept", "X-Requested-With",
+                        "Origin, Accept",
+                        "X-Requested-With",
                         "Access-Control-Request-Method",
-                        "Access-Control-Request-Headers"));
-        config.setExposedHeaders(
+                        "Access-Control-Request-Headers"
+                )
+        );
+        corsConfiguration.setExposedHeaders(
                 Arrays.asList(
                         "Origin",
                         "Content-Type",
@@ -36,10 +50,14 @@ public class CorsConfig {
                         "Access-Control-Allow-Credentials"
                 )
         );
-        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-
+        corsConfiguration.setAllowedMethods(
+                Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")
+        );
         var urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
-        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", config);
+        urlBasedCorsConfigurationSource.registerCorsConfiguration(
+                "/**",
+                corsConfiguration
+        );
 
         return new CorsFilter(urlBasedCorsConfigurationSource);
     }
