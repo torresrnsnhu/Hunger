@@ -6,8 +6,6 @@ import com.api.perfectchef.user.repository.UserRepository;
 import com.api.perfectchef.user.entity.dto.UserDto;
 import com.api.perfectchef.user.entity.UserEntity;
 import lombok.AllArgsConstructor;
-import org.bson.types.ObjectId;
-import org.jetbrains.annotations.NotNull;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +15,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -32,14 +31,13 @@ public class UserService {
 
     public List<UserDto> findAllUsers() {
         var userEntityList = new ArrayList<>(repo.findAll());
-
         return userEntityList
                 .stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
 
-    public UserDto findUserById(final ObjectId id) {
+    public UserDto findUserById(final UUID id) {
         var user = repo
                 .findById(id)
                 .orElseThrow(
@@ -65,34 +63,32 @@ public class UserService {
         byte[] salt = createSalt();
         byte[] hashedPassword = createPasswordHash(password, salt);
 
-        user.setStoreSalt(salt);
-        user.setStoreHash(hashedPassword);
-
+        user.setStoredSalt(salt);
+        user.setStoredHash(hashedPassword);
         repo.save(user);
-
         return convertToDto(user);
     }
 
-    public void updateUser(ObjectId id, UserDto userDto, String password)
+    public void updateUser(UUID id, UserDto userDto, String password)
             throws NoSuchAlgorithmException {
         var user = findOrThrow(id);
         var userParam = convertToEntity(userDto);
 
         user.setEmail(userParam.getEmail());
-        user.setPhoneNumber(userParam.getPhoneNumber());
+        user.setMobileNumber(userParam.getMobileNumber());
 
         if (!password.isBlank()) {
             byte[] salt = createSalt();
             byte[] hashedPassword = createPasswordHash(password, salt);
 
-            user.setStoreSalt(salt);
-            user.setStoreHash(hashedPassword);
+            user.setStoredSalt(salt);
+            user.setStoredHash(hashedPassword);
         }
 
         repo.save(user);
     }
 
-    public void removeUserById(ObjectId id) {
+    public void removeUserById(UUID id) {
         findOrThrow(id);
         repo.deleteById(id);
     }
@@ -113,7 +109,7 @@ public class UserService {
         return md.digest(password.getBytes(StandardCharsets.UTF_8));
     }
 
-    private UserEntity findOrThrow(final ObjectId id) {
+    private UserEntity findOrThrow(final UUID id) {
         return repo
                 .findById(id)
                 .orElseThrow(

@@ -1,16 +1,13 @@
 package com.api.perfectchef.user.entity.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.bson.types.ObjectId;
+import lombok.*;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDto {
-    private ObjectId id;
-    private String username;
+    private UUID id;
     private String email;
     private String phoneNumber;
     private String password;

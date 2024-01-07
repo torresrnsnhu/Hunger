@@ -2,16 +2,14 @@ package com.api.perfectchef.localrecipes.entity.dto;
 
 import com.api.perfectchef.api.model.AnalyzedInstructionDto;
 import com.api.perfectchef.api.model.ExtendedIngredientDto;
-import lombok.Getter;
-import lombok.Setter;
-import org.bson.types.ObjectId;
+import lombok.*;
 
 import java.util.List;
 
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class RecipeDto {
-    private ObjectId _id;
     private String image;
     private String title;
     private List<String> dishTypes;

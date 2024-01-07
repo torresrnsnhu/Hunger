@@ -30,7 +30,6 @@ public class JwtUtil {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
-
     private Claims extractAllClaims(String token) {
         return Jwts
                 .parserBuilder()
@@ -38,7 +37,6 @@ public class JwtUtil {
                 .parseClaimsJws(token)
                 .getBody();
     }
-
     private Boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }

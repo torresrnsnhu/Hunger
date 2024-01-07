@@ -1,22 +1,18 @@
 package com.api.perfectchef.localrecipes.controller;
 
+import com.api.perfectchef.localrecipes.entity.RecipeEntity;
 import com.api.perfectchef.localrecipes.entity.dto.RecipeDto;
 import com.api.perfectchef.localrecipes.service.LocalKitchenService;
-import com.api.perfectchef.localrecipes.entity.RecipeEntity;
 import lombok.AllArgsConstructor;
-import org.bson.types.ObjectId;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-
 
 import javax.validation.Valid;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("api/v1/recipes")
+@RequestMapping("/local/recipes")
 @PreAuthorize("isAuthenticated()")
 public class LocalKitchenController {
 
@@ -46,8 +42,7 @@ public class LocalKitchenController {
         return convertToDto(recipe);
     }
     @PutMapping("/{id}")
-    public void putRecipe(@PathVariable("id")ObjectId id, @Valid @RequestBody RecipeDto dto){
-        if(!id.equals(dto.get_id())) { throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID in path must match");}
+    public void putRecipe(@PathVariable("id")int id, @Valid @RequestBody RecipeDto dto){
             var recipeEntity = convertToEntity(dto);
             local.updateRecipe(id, recipeEntity);
     }

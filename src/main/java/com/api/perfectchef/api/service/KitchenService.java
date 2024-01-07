@@ -66,11 +66,9 @@ public class KitchenService {
             return ResponseEntity.notFound().build();
         }
         List<Recipe> recipeArray = response.getRecipes();
-
         if (recipeArray != null && !recipeArray.isEmpty()) {
             // Convert ResultsResponse to DTO
             ResponseEntity<List<RecipeDto>> dtoResponseEntity = convertToDto(recipeArray);
-
             if (dtoResponseEntity.getStatusCode().is2xxSuccessful()) {
                 // Convert DTO to JSON string
                 String json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(dtoResponseEntity.getBody());

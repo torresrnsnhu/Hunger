@@ -4,7 +4,6 @@ import com.api.perfectchef.exception.NotFoundException;
 import com.api.perfectchef.localrecipes.entity.RecipeEntity;
 import com.api.perfectchef.localrecipes.repository.LocalKitchenRepository;
 import lombok.AllArgsConstructor;
-import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,7 +14,7 @@ public class LocalKitchenService {
     public RecipeEntity findRecipeByTitle(String title) {
         return  findTitleOrThrow(title);
     }
-    public RecipeEntity findRecipeById(ObjectId id) {
+    public RecipeEntity findRecipeById(int id) {
         return findIdOrThrow(id);
     }
     public void removeRecipeByTitle(String title) {
@@ -24,12 +23,12 @@ public class LocalKitchenService {
     public RecipeEntity addRecipe(RecipeEntity recipe) {
         return localKitchenRepository.save(recipe);
     }
-    public void updateRecipe(ObjectId id, RecipeEntity recipe) {
+    public void updateRecipe(int id, RecipeEntity recipe) {
         this.findIdOrThrow(id);
         localKitchenRepository.save(recipe);
     }
 
-    private RecipeEntity findIdOrThrow(final ObjectId id) {
+    private RecipeEntity findIdOrThrow(final int id) {
         return localKitchenRepository.findById(id).orElseThrow(
                 () -> new NotFoundException("Recipe by id " + id + " was not found")
         );

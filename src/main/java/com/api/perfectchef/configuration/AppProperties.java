@@ -13,15 +13,12 @@ public class AppProperties {
     public String getClientUrl() {
         return clientUrl;
     }
-
     public void setClientUrl(String clientUrl) {
         this.clientUrl = clientUrl;
     }
-
     public String getJwtSecret() {
         return jwtSecret;
     }
-
     public void setJwtSecret(String jwtSecret) {
         this.jwtSecret = jwtSecret;
     }

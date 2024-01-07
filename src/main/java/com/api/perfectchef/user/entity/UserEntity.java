@@ -3,26 +3,28 @@ package com.api.perfectchef.user.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.bson.types.ObjectId;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.Column;
+import javax.persistence.*;
+import javax.validation.constraints.Email;
+import java.util.UUID;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection = "users")
+@Entity
 public class UserEntity {
-    private ObjectId id;
-    @Column(unique = true)
-    private String username;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "UUID")
+    @Column(nullable = false, updatable = false)
+    private UUID id;
     @Column(unique = true)
     private String email;
-    private String phoneNumber;
-    private byte[] storeHash;
-    private byte[] storeSalt;
+    private String mobileNumber;
+    private byte[] storedHash;
+    private byte[] storedSalt;
 
-    public UserEntity(String email, String phoneNumber){
+    public UserEntity(String email, String mobileNumber) {
         this.email = email;
-        this.phoneNumber = phoneNumber;
+        this.mobileNumber = mobileNumber;
     }
 }

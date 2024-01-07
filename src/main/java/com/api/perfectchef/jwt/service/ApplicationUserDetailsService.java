@@ -2,9 +2,12 @@ package com.api.perfectchef.jwt.service;
 
 import com.api.perfectchef.jwt.model.UserPrincipal;
 import com.api.perfectchef.user.entity.UserEntity;
+import com.api.perfectchef.user.repository.UserRepository;
 import com.api.perfectchef.user.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,6 +16,8 @@ import org.springframework.stereotype.Service;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -38,8 +43,8 @@ public class ApplicationUserDetailsService implements UserDetailsService {
 
         var verified = verifyPasswordHash(
                 password,
-                userEntity.getStoreHash(),
-                userEntity.getStoreSalt()
+                userEntity.getStoredHash(),
+                userEntity.getStoredSalt()
         );
 
         if (!verified) throw new BadCredentialsException("Unauthorized");
